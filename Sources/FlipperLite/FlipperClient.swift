@@ -1,15 +1,12 @@
 import Foundation
 
-final public class FlipperClient: NSObject {
-
+final public class FlipperClient {
     public static let shared = FlipperClient(plugins: [])
     
     fileprivate(set) var pluginsMap: [String: FlipperPlugin] = [:]
     fileprivate(set) var connections: [String: FlipperConnection] = [:]
     
-    private lazy var connectionConfig: FlipperConnectionConfig = {
-        return FlipperConnectionConfig(urlSession: URLSession(configuration: .default, delegate: self, delegateQueue: nil))
-    }()
+    private let connectionConfig = FlipperConnectionConfig()
     private var webSocketTask: URLSessionWebSocketTask?
     private let flipperQueue = DispatchQueue(label: "com.flipper.swift")
     fileprivate var sonarDirectoryURL: URL!
@@ -23,7 +20,6 @@ final public class FlipperClient: NSObject {
     private var currentRetryAttempts = 0
     
     private init(plugins: [FlipperPlugin]) {
-        super.init()
         setupInitialState()
         if let sonarDirectoryURL {
             self.connectionConstants = ConnectionConstants(sonarDirectoryURL: sonarDirectoryURL)
@@ -465,22 +461,5 @@ private extension FlipperClient {
                 try? FileManager.default.removeItem(at: url)
             }
         }
-    }
-}
-
-
-extension FlipperClient: URLSessionWebSocketDelegate {
-
-    public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-           print("Websocket task completed with error: \(String(describing: error))")
-       }
-
-    public func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol proto: String?) {
-        print("Websocket task did open with protocol: \(String(describing: proto))")
-    }
-
-
-    public func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
-        print("Websocket task did close with code: \(closeCode.rawValue) and reason: \(String(describing: reason))")
     }
 }
