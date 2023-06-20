@@ -231,11 +231,8 @@ private extension FlipperClient {
             switch result {
             case .failure(let error):
                 if webSocketTask.state == .running {
-                    FlipperLogger.logError("Error while processing frames: \(error.localizedDescription)")
-                    /// This re-subscription is necessary to listen to new messages.
                     self?.subscribe(webSocketTask: webSocketTask)
                 } else {
-                    FlipperLogger.logError("Failed to connect to the Flipper IDE: \(error.localizedDescription)")
                     self?.reconnectIfNeeded(on: error)
                 }
             case .success(let message):
