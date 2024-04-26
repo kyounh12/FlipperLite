@@ -15,6 +15,7 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
+        .package(url: "https://github.com/krzyzanowskim/OpenSSL.git", exact: Version("1.1.1900")),
         .package(url: "https://github.com/robbiehanson/CocoaAsyncSocket", exact: Version("7.6.5")),
         .package(url: "https://github.com/chiragramani/FlipperPluginUtils",
                  branch: "main"),
@@ -28,7 +29,11 @@ let package = Package(
             name: "FlipperLite",
             dependencies: ["CertUtils", "FKPortForwardingServer", "FlipperPluginUtils"]),
         .target(
-            name: "CertUtils"),
+            name: "CertUtils",
+            dependencies: [
+                "OpenSSL"
+            ],
+            publicHeadersPath: "include"),
         .target(
             name: "FKPortForwardingServer",
             dependencies: [
