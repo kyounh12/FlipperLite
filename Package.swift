@@ -15,7 +15,7 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        .package(url: "https://github.com/krzyzanowskim/OpenSSL.git", from: "3.1.5001"),
+        .package(url: "https://github.toss.bz/toss/toss-ios-openssl.git", exact: "1.1.1700"),
         .package(url: "https://github.com/robbiehanson/CocoaAsyncSocket", exact: Version("7.6.5")),
         .package(url: "https://github.com/chiragramani/FlipperPluginUtils",
                  branch: "main"),
@@ -31,7 +31,7 @@ let package = Package(
         .target(
             name: "CertUtils",
             dependencies: [
-                "OpenSSL"
+                .product(name: "OpenSSL", package: "toss-ios-openssl")
             ],
             publicHeadersPath: "include"),
         .target(
