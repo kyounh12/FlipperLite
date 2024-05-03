@@ -15,7 +15,7 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        .package(url: "https://github.toss.bz/toss/toss-ios-openssl.git", exact: "1.1.1700"),
+        .package(url: "https://github.toss.bz/toss/toss-ios-openssl.git", from: "1.1.1700"),
         .package(url: "https://github.com/robbiehanson/CocoaAsyncSocket", exact: Version("7.6.5")),
         .package(url: "https://github.com/chiragramani/FlipperPluginUtils",
                  branch: "main"),
