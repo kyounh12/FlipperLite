@@ -75,8 +75,9 @@ extension FlipperClient: FlipperMessageBus {
         guard isConnected,
               let webSocketTask = webSocketTask else { return }
         do {
-            let jsonData = try JSONSerialization.data(withJSONObject: transformedDict(message),
-                                                      options: [.fragmentsAllowed])
+            let transformedDictionary = transformedDict(message)
+
+            let jsonData = try JSONSerialization.data(withJSONObject: transformedDictionary)
             let stringifiedJSON = String(data: jsonData,
                                          encoding: .utf8) ?? ""
             let message = URLSessionWebSocketTask.Message.string(stringifiedJSON)
@@ -92,10 +93,13 @@ extension FlipperClient: FlipperMessageBus {
     
     private func transformedValue(_ value: Any) -> Any {
         // This might not be exhaustive.
-        if let dataValue = value as? Data {
+        if let dataValue = value as? Data,
             let stringValue = String(data: dataValue,
-                                     encoding: .utf8)
+                                     encoding: .utf8) {
             return stringValue
+        }
+        if let urlValue = value as? URL {
+            return urlValue.absoluteString
         }
         if let dictValue = value as? [String: Any] {
             return dictValue.mapValues { transformedValue($0) }
@@ -103,6 +107,22 @@ extension FlipperClient: FlipperMessageBus {
         if let arrayValue = value as? Array<Any> {
             return arrayValue.map { transformedValue($0) }
         }
+        if let stringValue = value as? String {
+            return stringValue
+        }
+        if let dateValue = value as? Date {
+            let formatter = ISO8601DateFormatter()
+            let dateString = formatter.string(from: dateValue)
+            return dateString
+        }
+        if let boolValue = value as? Bool {
+            return boolValue
+        }
+
+        if let data = value as? Data {
+            return data.description
+        }
+
         return value
     }
     
@@ -211,11 +231,8 @@ private extension FlipperClient {
             switch result {
             case .failure(let error):
                 if webSocketTask.state == .running {
-                    FlipperLogger.logError("Error while processing frames: \(error.localizedDescription)")
-                    /// This re-subscription is necessary to listen to new messages.
                     self?.subscribe(webSocketTask: webSocketTask)
                 } else {
-                    FlipperLogger.logError("Failed to connect to the Flipper IDE: \(error.localizedDescription)")
                     self?.reconnectIfNeeded(on: error)
                 }
             case .success(let message):

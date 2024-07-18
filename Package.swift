@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "FlipperLite",
-    platforms: [.iOS(.v15), .macOS(.v12)],
+    platforms: [.iOS(.v14), .macOS(.v12)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
@@ -15,7 +15,7 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        .package(url: "https://github.com/krzyzanowskim/OpenSSL.git", exact: Version("1.1.1900")),
+        .package(url: "https://github.com/krzyzanowskim/OpenSSL.git", .upToNextMinor(from: "1.1.2300")),
         .package(url: "https://github.com/robbiehanson/CocoaAsyncSocket", exact: Version("7.6.5")),
         .package(url: "https://github.com/chiragramani/FlipperPluginUtils",
                  branch: "main"),
