@@ -28,12 +28,12 @@
       }
     },
     {
-      "identity" : "openssl",
+      "identity" : "toss-ios-openssl",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/krzyzanowskim/OpenSSL.git",
+      "location" : "https://github.toss.bz/toss/toss-ios-openssl.git",
       "state" : {
-        "revision" : "8cb1d641ab5ebce2cd7cf31c93baef07bed672d4",
-        "version" : "1.1.2301"
+        "revision" : "fe198309e222540c27b3ef1f050a99688487b236",
+        "version" : "1.1.2201"
       }
     }
   ],
